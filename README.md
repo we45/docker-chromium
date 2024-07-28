@@ -7,42 +7,22 @@
 
 
 
-### Run without domain setup
-Comment out all nginx and certbot service inside "docker-compose.yaml" file
-Or replace the content of "docker-compose.yaml" file with this: 
-```yaml
-services:
-  chromium:
-    build: .
-    container_name: chromium
-    restart: unless-stopped
-    security_opt:
-      - seccomp:unconfined #optional
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Etc/UTC
-      - CHROME_CLI=https://www.google.com/ #optional
-    volumes:
-      - ./data/chromium/config:/config
-    ports:
-      - 3000:3000
-    shm_size: "1gb"
-```
+### Run without nginx setup
 
-Now run the container using docker compose
 ```bash
-sudo docker compose up
+sudo docker compose -f docker-compose-standalone.yaml up
 ```
 
-Now visit the URL "localhost:3000"
+Now visit the URL "https://localhost:8443"
 
-### Run with domain setup
+### Run with domain setup with nginx
 1. Add a A record on your domain pointing to your server IP address
 2. Clone this repository
 3. Modify configuration:
 - Add domains and email addresses to init-letsencrypt.sh
 - Replace all occurrences of "chromium.akashdeep.pro" with primary domain (the first one you added to init-letsencrypt.sh) in data/nginx/app.conf
+- Change staging variable (`staging=1`) to 0 for production otherwise keep 1 if you're testing your setup to avoid hitting request limits.
+
 
 4. Generate lets-encriypt ssl certificate by running:
 
