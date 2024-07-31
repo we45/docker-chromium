@@ -63,5 +63,7 @@ else
 fi
 
 # Providing browser access url
+sudo DEBIAN_FRONTEND=noninteractive apt-get -qq update -y
+sudo DEBIAN_FRONTEND=noninteractive apt-get -qq install jq -y
 printf "\nThe browser can now be accessed at:\t\n"
 echo https://$(jq -r '.apps.http.servers.srv0.routes[0].match[0].host[0]' /root/.config/caddy.json):8443
